@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # ============================================================================
+  # Filesystem Server - File operations (read, write, search, directory tree)
+  # ============================================================================
+  mcp-filesystem:
+    image: mcp/server-filesystem:latest
+    container_name: mcp-filesystem
+    volumes:
+      # Mount your project directories here
+      - ${WORKSPACE_PATH:-/workspace}:/workspace:ro  # Read-only
+    ports:
+      - "3100:3100"
+    environment:
+      - ALLOWED_DIRECTORIES=/workspace
+      - MCP_PORT=3100
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================================================
+  # Git Server - Version control operations (log, diff, branch, status)
+  # ============================================================================
+  mcp-git:
+    image: mcp/server-git:latest
+    container_name: mcp-git
+    volumes:
+      - ${WORKSPACE_PATH:-/workspace}:/repo:ro
+    ports:
+      - "3101:3101"
+    environment:
+      - GIT_REPO_PATH=/repo
+      - MCP_PORT=3101
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3101/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================================================
+  # GitHub Server - GitHub API integration (PRs, issues, commits, branches)
+  # ============================================================================
+  mcp-github:
+    image: ghcr.io/github/github-mcp-server:latest
+    container_name: mcp-github
+    ports:
+      - "3102:3102"
+    environment:
+      - GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_TOKEN}
+      - MCP_PORT=3102
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3102/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================================================
+  # Brave Search - Web search for research and documentation
+  # ============================================================================
+  mcp-brave-search:
+    image: mcp/server-brave-search:latest
+    container_name: mcp-brave-search
+    ports:
+      - "3103:3103"
+    environment:
+      - BRAVE_API_KEY=${BRAVE_API_KEY}  # Optional - get free key at brave.com/search/api
+      - MCP_PORT=3103
+    restart: unless-stopped
+    profiles:
+      - full  # Optional service - start with: docker-compose --profile full up
+
+  # ============================================================================
+  # Sequential Thinking - Advanced reasoning for complex tasks
+  # ============================================================================
+  mcp-sequential-thinking:
+    image: mcp/server-sequential-thinking:latest
+    container_name: mcp-sequential-thinking
+    ports:
+      - "3104:3104"
+    environment:
+      - MCP_PORT=3104
+    restart: unless-stopped
+
+  # ============================================================================
+  # Memory - Persistent context across sessions
+  # ============================================================================
+  mcp-memory:
+    image: mcp/server-memory:latest
+    container_name: mcp-memory
+    ports:
+      - "3105:3105"
+    volumes:
+      - memory-data:/data
+    environment:
+      - MCP_PORT=3105
+    restart: unless-stopped
+    profiles:
+      - full  # Optional service
+
+volumes:
+  memory-data:
+    driver: local
+
+# Usage:
+# docker-compose up -d                    # Start essential services
+# docker-compose --profile full up -d     # Start all services including optional
+# docker-compose ps                       # Check status
+# docker-compose logs -f mcp-filesystem   # View logs
+# docker-compose down                     # Stop all services
+

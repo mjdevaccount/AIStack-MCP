@@ -1,0 +1,155 @@
+# AIStack Development Standards
+
+## Project Context
+
+You have access to the codebase via MCP protocol with these tools:
+
+- **filesystem**: Read/write/search files
+- **git**: View history and changes
+- **github**: Check PRs and issues
+- **sequential-thinking**: Break down complex tasks
+- **brave-search**: Research best practices
+
+## MCP Usage Guidelines
+
+### When to Use MCP Tools
+
+1. **Understanding Context**: Use filesystem to read related files
+2. **Pattern Matching**: Search for similar implementations
+3. **Change History**: Use git to understand why code exists
+4. **Research**: Use brave-search for best practices
+5. **Complex Tasks**: Use sequential-thinking to plan approach
+
+### Token Optimization
+
+- Read only necessary files (ask which files before reading)
+- Use git log with --oneline for quick history
+- Summarize large files before suggesting changes
+- Prefer targeted searches over reading entire directories
+
+## Code Standards
+
+### Architecture
+
+- Async/await for all I/O operations
+- Dependency injection via constructor
+- Interface-based design for testability
+- SOLID principles throughout
+
+### Error Handling
+
+- Use Result<T> pattern for expected failures
+- Never throw exceptions for control flow
+- Log errors with structured context
+- Include correlation IDs for tracing
+
+### Async Patterns
+
+- Always async/await (never .Result or .Wait())
+- Use ConfigureAwait(false) in library code
+- Cancel operations with CancellationToken
+- Handle TimeoutException and OperationCanceledException
+
+### Logging
+
+- Structured logging with context objects
+- Appropriate log levels (Debug/Info/Warning/Error)
+- Include timing information for operations
+- Sensitive data excluded from logs
+
+### Testing
+
+- Unit tests for business logic (xUnit)
+- Integration tests for workflows
+- Mocked dependencies via interfaces
+- Test both happy path and error cases
+
+## Workflow
+
+### Before Making Changes
+
+1. Use MCP filesystem to read target file
+2. Use git to check recent changes
+3. Search for similar patterns in codebase
+4. Ask me to confirm approach before implementing
+
+### When Suggesting Code
+
+1. Explain what you read via MCP
+2. Reference specific files and patterns found
+3. Show how your suggestion matches existing style
+4. Highlight any deviations from standard patterns
+
+### For Complex Changes
+
+1. Use sequential-thinking to break down task
+2. Show me the plan before executing
+3. Implement incrementally with tests
+4. Use git to verify no unintended changes
+
+## Project Structure
+
+- src/Core/ - Domain models and interfaces
+- src/Orchestration/ - Task coordination
+- src/Agents/ - AI agent implementations  
+- tests/ - Unit and integration tests
+
+## Dependencies
+
+- .NET 8 for C# projects
+- Python 3.11+ for AI workflows
+- Docker for containerization
+
+## Common Patterns
+
+### Result<T> Error Handling
+
+```csharp
+public async Task<Result<Data>> GetDataAsync()
+{
+    try
+    {
+        var data = await _service.FetchAsync();
+        return Result<Data>.Success(data);
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Failed to fetch data");
+        return Result<Data>.Failure($"Fetch failed: {ex.Message}");
+    }
+}
+```
+
+### Structured Logging
+
+```csharp
+_logger.LogInformation(
+    "Operation completed",
+    new {
+        OperationId = operationId,
+        Duration = duration.TotalMilliseconds,
+        ItemCount = items.Count
+    }
+);
+```
+
+### Async Best Practice
+
+```csharp
+public async Task<string> ProcessAsync(CancellationToken ct)
+{
+    var result = await _httpClient
+        .GetStringAsync(url, ct)
+        .ConfigureAwait(false);
+    
+    return result;
+}
+```
+
+## Remember
+
+- Use MCP tools to understand context first
+- Match existing patterns found in codebase
+- Ask before making significant architectural changes
+- Test thoroughly before suggesting code
+

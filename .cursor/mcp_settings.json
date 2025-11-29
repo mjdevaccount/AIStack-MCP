@@ -1,0 +1,80 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "mcp-filesystem",
+        "mcp-server-filesystem"
+      ],
+      "description": "File operations - read, write, search, directory tree"
+    },
+    "git": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "mcp-git",
+        "mcp-server-git"
+      ],
+      "description": "Git operations - history, diff, branches, status"
+    },
+    "github": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "mcp-github",
+        "mcp-server-github"
+      ],
+      "description": "GitHub API - PRs, issues, commits, branches"
+    },
+    "sequential-thinking": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "mcp-sequential-thinking",
+        "mcp-server-sequential-thinking"
+      ],
+      "description": "Advanced reasoning for complex multi-step tasks"
+    },
+    "brave-search": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "mcp-brave-search",
+        "mcp-server-brave-search"
+      ],
+      "description": "Web search for research and documentation (optional)"
+    },
+    "memory": {
+      "command": "docker",
+      "args": [
+        "exec",
+        "-i",
+        "mcp-memory",
+        "mcp-server-memory"
+      ],
+      "description": "Persistent context across sessions (optional)"
+    }
+  },
+  
+  "rules": {
+    "tokenOptimization": {
+      "preferCompressedContext": true,
+      "maxFileSize": 50000,
+      "autoSummarize": true
+    },
+    "toolPriority": [
+      "sequential-thinking",
+      "filesystem", 
+      "git",
+      "github",
+      "brave-search"
+    ]
+  }
+}
+
