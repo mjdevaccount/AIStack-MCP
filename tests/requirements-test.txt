@@ -1,0 +1,25 @@
+# AIStack-MCP Test Dependencies
+
+# Test framework
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+pytest-timeout>=2.2.0
+pytest-mock>=3.12.0
+
+# HTTP mocking
+responses>=0.24.0
+httpx>=0.26.0
+
+# Async testing
+aiohttp>=3.9.0
+
+# Coverage
+coverage>=7.3.0
+
+# Type checking (optional)
+mypy>=1.8.0
+
+# Code quality (optional)
+ruff>=0.1.0
+
