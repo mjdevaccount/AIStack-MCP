@@ -23,13 +23,17 @@
         "C:\\AIStack-MCP"
       ]
     },
-    "git": {
+    "github": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-git",
-        "--repository",
-        "C:\\AIStack-MCP"
+        "dotenv-cli",
+        "-e",
+        "C:\\AIStack-MCP\\.env",
+        "--",
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
       ]
     }
   }
