@@ -182,3 +182,5 @@ Write-Host "  To test MCP tools:" -ForegroundColor Cyan
 Write-Host "    • In Cursor chat: 'Use code-intelligence to validate_workspace_config'" -ForegroundColor White
 Write-Host ""
 
+
+

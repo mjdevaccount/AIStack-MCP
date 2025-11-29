@@ -47,3 +47,5 @@ Built on the shoulders of giants: MCP Protocol, Ollama, Qdrant, and the Cursor t
 
 **Full Changelog**: https://github.com/mjdevaccount/AIStack-MCP/commits/v1.0.0
 
+
+

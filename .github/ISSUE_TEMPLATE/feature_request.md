@@ -45,3 +45,5 @@ Example workflow:
 - [ ] This feature aligns with the project's goals (local-first, MCP orchestration)
 - [ ] I would be willing to help implement this feature
 
+
+

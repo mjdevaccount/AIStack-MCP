@@ -511,6 +511,96 @@ async def index_workspace(
 
 
 # ============================================================================
+# TOOL: Directory Tree (Replacement for buggy upstream)
+# ============================================================================
+
+@mcp.tool()
+async def directory_tree(
+    path: str = "",
+    max_depth: int = 3,
+    exclude_patterns: str = "node_modules,__pycache__,.git,*.pyc,.venv,venv"
+) -> str:
+    """
+    Get directory tree structure for workspace.
+    
+    Replaces buggy upstream @modelcontextprotocol/server-filesystem directory_tree.
+    Returns a clean string representation that works with MCP.
+    
+    Args:
+        path: Relative path from workspace (empty = workspace root)
+        max_depth: Maximum depth to traverse (default 3)
+        exclude_patterns: Comma-separated patterns to exclude
+        
+    Returns:
+        Directory tree as formatted string
+        
+    Example:
+        directory_tree("src", max_depth=2)
+    """
+    try:
+        target = WORKSPACE_PATH / path if path else WORKSPACE_PATH
+        
+        if not target.exists():
+            return f"Error: Path not found: {path}"
+        
+        if not target.is_dir():
+            return f"Error: Not a directory: {path}"
+        
+        excludes = set(p.strip() for p in exclude_patterns.split(","))
+        
+        def should_exclude(name: str) -> bool:
+            for pattern in excludes:
+                if pattern.startswith("*"):
+                    if name.endswith(pattern[1:]):
+                        return True
+                elif name == pattern:
+                    return True
+            return False
+        
+        def build_tree(dir_path: Path, prefix: str = "", depth: int = 0) -> List[str]:
+            if depth > max_depth:
+                return [f"{prefix}..."]
+            
+            lines = []
+            try:
+                items = sorted(dir_path.iterdir(), key=lambda x: (not x.is_dir(), x.name.lower()))
+            except PermissionError:
+                return [f"{prefix}[Permission Denied]"]
+            
+            # Filter excluded items
+            items = [i for i in items if not should_exclude(i.name)]
+            
+            for i, item in enumerate(items):
+                is_last = i == len(items) - 1
+                connector = "└── " if is_last else "├── "
+                
+                if item.is_dir():
+                    lines.append(f"{prefix}{connector}📁 {item.name}/")
+                    extension = "    " if is_last else "│   "
+                    lines.extend(build_tree(item, prefix + extension, depth + 1))
+                else:
+                    lines.append(f"{prefix}{connector}📄 {item.name}")
+            
+            return lines
+        
+        tree_lines = [f"📁 {target.name}/"]
+        tree_lines.extend(build_tree(target))
+        
+        result = "\n".join(tree_lines)
+        
+        # Add summary
+        dir_count = result.count("📁") - 1  # Exclude root
+        file_count = result.count("📄")
+        result += f"\n\n({dir_count} directories, {file_count} files shown)"
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Directory tree failed: {e}")
+        return f"Error: {str(e)}"
+
+
+# ============================================================================
 # TOOL: Validate Workspace Configuration
 # ============================================================================
 
@@ -604,7 +694,7 @@ if __name__ == "__main__":
     logger.info(f"Ollama URL: {OLLAMA_URL}")
     logger.info(f"Qdrant URL: {QDRANT_URL}")
     logger.info("=" * 60)
-    logger.info("Tools: semantic_search, analyze_patterns, get_context, generate_code, index_workspace, validate_workspace_config")
+    logger.info("Tools: semantic_search, analyze_patterns, get_context, generate_code, index_workspace, directory_tree, validate_workspace_config")
     
     # Windows-specific warnings
     if platform.system() == "Windows":

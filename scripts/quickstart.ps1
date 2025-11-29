@@ -248,3 +248,5 @@ Write-Host "  🚀 Ready! Restart Cursor and open your workspace." -ForegroundCo
 Write-Host ("=" * 70) -ForegroundColor Green
 Write-Host ""
 
+
+

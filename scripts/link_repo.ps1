@@ -157,3 +157,5 @@ Write-Host "    1. Run: .\scripts\switch_to_multi_repo.ps1" -ForegroundColor Whi
 Write-Host "    2. Restart Cursor" -ForegroundColor White
 Write-Host ""
 
+
+

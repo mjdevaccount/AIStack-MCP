@@ -100,6 +100,57 @@ You have access to the codebase via MCP protocol with these tools:
 - Python 3.11+ for AI workflows
 - Docker for containerization
 
+## Environment (Windows)
+
+This project runs on **Windows 10/11** with **PowerShell** as the default shell.
+
+### Shell Command Syntax
+
+- **DO NOT use `&&`** - PowerShell does not support `&&` as a command separator
+- **USE semicolons** to chain commands: `cd C:\path; git status`
+- **USE `-and`** for conditional execution: `(command1) -and (command2)`
+
+```powershell
+# WRONG - will fail with "token '&&' is not valid"
+cd C:\AIStack-MCP && git log --oneline -5
+
+# CORRECT - use semicolon
+cd C:\AIStack-MCP; git log --oneline -5
+
+# CORRECT - single command with full path
+git -C C:\AIStack-MCP log --oneline -5
+```
+
+### Path Format
+
+- Use backslashes for Windows paths: `C:\AIStack-MCP\scripts`
+- Or forward slashes (PowerShell accepts both): `C:/AIStack-MCP/scripts`
+
+### Console Output Encoding
+
+**Windows console uses cp1252 encoding** - Unicode characters will crash Python scripts!
+
+- **DO NOT use Unicode symbols**: `✓`, `✗`, `→`, `•`, `▶`, emojis, etc.
+- **USE ASCII alternatives**: `[OK]`, `[FAIL]`, `[WARN]`, `->`, `*`, `-`, `>>`
+
+```python
+# WRONG - will crash with UnicodeEncodeError on Windows
+print("✓ Connected to Qdrant")
+print("✗ Connection failed")
+print("→ Processing...")
+
+# CORRECT - ASCII-safe for Windows console
+print("[OK] Connected to Qdrant")
+print("[FAIL] Connection failed")
+print(">> Processing...")
+```
+
+**Safe status indicators:**
+- Success: `[OK]`, `[PASS]`, `[SUCCESS]`, `[+]`
+- Failure: `[FAIL]`, `[ERROR]`, `[X]`, `[-]`
+- Warning: `[WARN]`, `[!]`, `[?]`
+- Info: `[INFO]`, `[*]`, `>>`
+
 ## Common Patterns
 
 ### Result<T> Error Handling
@@ -152,6 +203,7 @@ public async Task<string> ProcessAsync(CancellationToken ct)
 - Match existing patterns found in codebase
 - Ask before making significant architectural changes
 - Test thoroughly before suggesting code
+
 
 
 

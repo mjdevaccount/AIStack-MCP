@@ -76,3 +76,5 @@ Add any other context about the problem here.
 - [ ] I have restarted Cursor completely
 - [ ] I have checked the [troubleshooting docs](docs/troubleshooting/)
 
+
+

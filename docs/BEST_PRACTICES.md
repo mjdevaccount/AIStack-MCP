@@ -268,3 +268,5 @@ Get-Content .cursor\ACTIVE_MODE.txt            # Current mode
 |---------|------|---------|
 | 1.0 | 2025-11 | Initial release with single/multi-repo modes |
 
+
+

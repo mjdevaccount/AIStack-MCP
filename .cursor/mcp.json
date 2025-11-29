@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "code-intelligence": {
+    "aistack-intelligence": {
       "command": "cmd",
       "args": [
         "/c",
