@@ -270,3 +270,8 @@ Get-Content .cursor\ACTIVE_MODE.txt            # Current mode
 
 
 
+
+
+
+
+
