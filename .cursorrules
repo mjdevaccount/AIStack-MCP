@@ -4,11 +4,19 @@
 
 You have access to the codebase via MCP protocol with these tools:
 
-- **filesystem**: Read/write/search files
+- **filesystem**: Read/write/search files (including .env files)
 - **git**: View history and changes
 - **github**: Check PRs and issues
 - **sequential-thinking**: Break down complex tasks
 - **brave-search**: Research best practices
+
+### Environment Files
+
+**You CAN and SHOULD read .env files when needed:**
+- `.env` file is explicitly allowed in `.cursorignore`
+- Use it to read API keys, tokens, and configuration values
+- This is necessary for setting up MCP servers and services
+- Example: Reading `GITHUB_PERSONAL_ACCESS_TOKEN` from `.env` to configure GitHub MCP server
 
 ## MCP Usage Guidelines
 

@@ -1,5 +1,10 @@
 ﻿# Cursor ignore file
-# .env is intentionally NOT ignored so it can be edited
+# .env is intentionally NOT ignored so it can be edited and read by AI
+
+# Explicitly allow .env file
+!.env
+.env.local
+.env.*.local
 
 # Allow AI to edit MCP configuration
 !.cursor/mcp.json
