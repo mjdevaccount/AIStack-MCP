@@ -88,13 +88,36 @@ Use code-intelligence to validate_workspace_config
 
 ### Multi-Repo Usage
 
-**Option 1: Dynamic (Recommended)**
+**Mode 1: Single-Repo (Default)**
 
 Use the included `.cursor/mcp.json` - it automatically adapts to any workspace via `${workspaceFolder}`.
 
-**Option 2: Explicit Launch**
 ```powershell
-.\scripts\launch_mcp_for_repo.ps1 -RepoPath "C:\Projects\MyApp"
+# Ensure single-repo mode is active
+.\scripts\switch_to_single_repo.ps1
+```
+
+**Mode 2: Multi-Repo Orchestration (CORE Workspace)**
+
+Link multiple repos and access them all from one CORE workspace:
+
+```powershell
+# 1. Link repos (run PowerShell as Admin)
+cmd /c mklink /D "workspaces\my-app" "C:\Projects\my-app"
+cmd /c mklink /D "workspaces\my-lib" "C:\Projects\my-lib"
+
+# 2. Activate multi-repo mode
+.\scripts\switch_to_multi_repo.ps1
+
+# 3. Restart Cursor and open CORE workspace
+cursor C:\AIStack-MCP
+```
+
+**Interactive Config Builder**
+
+For guided setup of either mode:
+```powershell
+python scripts\mcp_config_builder.py
 ```
 
 See [docs/WORKSPACE_PATTERN.md](docs/WORKSPACE_PATTERN.md) for full details.
@@ -104,20 +127,25 @@ See [docs/WORKSPACE_PATTERN.md](docs/WORKSPACE_PATTERN.md) for full details.
 ```
 AIStack-MCP/
 ├── .cursor/
-│   └── mcp.json              # MCP server configuration
+│   └── mcp.json                  # MCP server configuration
 ├── docs/
-│   ├── WORKSPACE_PATTERN.md  # Workspace pattern documentation
-│   ├── SETUP.md              # Setup guide
-│   └── troubleshooting/      # Troubleshooting guides
+│   ├── WORKSPACE_PATTERN.md      # Workspace pattern documentation
+│   ├── SETUP.md                  # Setup guide
+│   └── troubleshooting/          # Troubleshooting guides
 ├── scripts/
-│   ├── validate_workspace.py # Workspace validation tool
+│   ├── mcp_config_builder.py     # Config generator (single/multi-repo)
+│   ├── switch_to_multi_repo.ps1  # Activate multi-repo mode
+│   ├── switch_to_single_repo.ps1 # Activate single-repo mode
+│   ├── validate_workspace.py     # Workspace validation tool
 │   ├── test_workspace_pattern.py # Integration tests
 │   └── launch_mcp_for_repo.ps1   # Per-repo launcher
-├── python_agent/             # Python agent modules
-├── mcp_intelligence_server.py # Main MCP server
-├── requirements.txt          # Python dependencies
-├── docker-compose.yml        # Docker services
-└── README.md                 # This file
+├── workspaces/                   # Linked repos for multi-repo mode
+│   └── README.md
+├── python_agent/                 # Python agent modules
+├── mcp_intelligence_server.py    # Main MCP server
+├── requirements.txt              # Python dependencies
+├── docker-compose.yml            # Docker services
+└── README.md                     # This file
 ```
 
 ## Tools Available
@@ -263,6 +291,25 @@ Use code-intelligence to index_workspace
 ```
 
 This only needs to run once per project.
+
+## Quick Reference
+
+```powershell
+# Single-repo mode (portable, isolated)
+.\scripts\switch_to_single_repo.ps1
+
+# Multi-repo mode (CORE orchestration)
+.\scripts\switch_to_multi_repo.ps1
+
+# Interactive config builder
+python scripts\mcp_config_builder.py
+
+# Validate workspace configuration
+python scripts\validate_workspace.py --workspace C:\AIStack-MCP
+
+# In Cursor chat
+Use code-intelligence to validate_workspace_config
+```
 
 ## Cost Comparison
 

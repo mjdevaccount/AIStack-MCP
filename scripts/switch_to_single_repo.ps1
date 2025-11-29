@@ -1,0 +1,80 @@
+<#
+.SYNOPSIS
+    Switch to single-repo mode
+
+.DESCRIPTION
+    Generates a single-repo MCP configuration that uses ${workspaceFolder}
+    for maximum portability. This is the default mode for isolated development.
+
+.PARAMETER Workspace
+    Optional. The workspace path to generate config for. Defaults to the
+    CORE repository (parent of scripts/).
+
+.EXAMPLE
+    # Generate for CORE repo
+    .\switch_to_single_repo.ps1
+
+.EXAMPLE
+    # Generate for a different workspace
+    .\switch_to_single_repo.ps1 -Workspace "C:\Projects\MyApp"
+
+.NOTES
+    Requires Python 3.8+ and the mcp_config_builder.py script.
+#>
+
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$Workspace
+)
+
+$ErrorActionPreference = "Stop"
+$CorePath = Split-Path $PSScriptRoot -Parent
+
+# Use CORE path if no workspace specified
+if (-not $Workspace) {
+    $Workspace = $CorePath
+}
+
+$WorkspacePath = (Resolve-Path $Workspace -ErrorAction Stop).Path
+
+Write-Host ""
+Write-Host ("=" * 70) -ForegroundColor Cyan
+Write-Host "  SWITCH TO SINGLE-REPO MODE" -ForegroundColor Cyan
+Write-Host ("=" * 70) -ForegroundColor Cyan
+Write-Host ""
+Write-Host "  Workspace: $WorkspacePath" -ForegroundColor White
+Write-Host ""
+
+# Generate single-repo config
+Write-Host "  Generating single-repo config..." -ForegroundColor Yellow
+Write-Host ""
+
+$BuilderScript = Join-Path $PSScriptRoot "mcp_config_builder.py"
+
+try {
+    & python $BuilderScript `
+        --single `
+        --workspace $WorkspacePath
+    
+    if ($LASTEXITCODE -ne 0) {
+        throw "Config builder failed with exit code $LASTEXITCODE"
+    }
+}
+catch {
+    Write-Host "  ✗ Failed to generate config: $_" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host ""
+Write-Host ("=" * 70) -ForegroundColor Green
+Write-Host "  ✅ SINGLE-REPO MODE ACTIVATED" -ForegroundColor Green
+Write-Host ("=" * 70) -ForegroundColor Green
+Write-Host ""
+Write-Host "  Config uses `${workspaceFolder}` - fully portable!" -ForegroundColor White
+Write-Host ""
+Write-Host "  Next steps:" -ForegroundColor Cyan
+Write-Host "    1. Restart Cursor completely (close all windows)" -ForegroundColor White
+Write-Host "    2. Open workspace: $WorkspacePath" -ForegroundColor White
+Write-Host "    3. MCP servers will auto-configure for this repo only" -ForegroundColor White
+Write-Host ""
+
