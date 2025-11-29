@@ -1,19 +1,19 @@
-# Portable MCP Toolkit Dependencies
-
-# MCP Framework
-fastmcp>=0.2.0
-
-# Local LLM (Ollama)
-langchain-ollama>=0.2.0
-
-# Vector Database
-qdrant-client>=1.11.0
-
-# Logging
+# Core dependencies
+fastmcp>=0.1.0
+langchain-ollama>=0.1.0
+qdrant-client>=1.7.0
 loguru>=0.7.0
-
-# HTTP requests (for embeddings)
 requests>=2.31.0
+
+# Environment management
+python-dotenv>=1.0.0
+
+# Existing dependencies
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# New for v1.2.0 - Registry integration
+# (no additional deps required - uses stdlib + requests)
 
 
 

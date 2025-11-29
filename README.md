@@ -194,6 +194,53 @@ cursor .
 
 ---
 
+## 🌐 Community Tools (v1.2.0)
+
+### Browse 500+ MCP Servers
+
+Search for tools
+```powershell
+.\scripts\list_registry_tools.ps1 -Search "database"
+```
+
+Popular servers
+```powershell
+.\scripts\list_registry_tools.ps1 -Popular
+```
+
+### Install Community Tools
+
+Install PostgreSQL server
+```powershell
+.\scripts\install_community_tool.ps1 -ServerId "io.modelcontextprotocol/server-postgres"
+```
+
+Install Slack integration
+```powershell
+.\scripts\install_community_tool.ps1 -ServerId "io.modelcontextprotocol/server-slack"
+```
+
+### Apply Templates
+
+Minimal (search only)
+```powershell
+.\scripts\apply_template.ps1 -Template minimal
+```
+
+Standard (recommended)
+```powershell
+.\scripts\apply_template.ps1 -Template standard
+```
+
+Full (all features)
+```powershell
+.\scripts\apply_template.ps1 -Template full
+```
+
+See [Registry Documentation](docs/REGISTRY.md) for full guide.
+
+---
+
 ## 📦 Installation
 
 ### System Requirements
