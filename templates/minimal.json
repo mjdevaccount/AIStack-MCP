@@ -1,0 +1,40 @@
+{
+  "name": "minimal",
+  "description": "Lightweight template - semantic search only",
+  "author": "AIStack-MCP",
+  "version": "1.0.0",
+  "servers": [
+    {
+      "name": "code-intelligence",
+      "type": "custom",
+      "enabled": true,
+      "tools": ["semantic_search", "index_workspace", "validate_workspace_config"],
+      "config": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "python",
+          "${workspaceFolder}/../AIStack-MCP/mcp_intelligence_server.py",
+          "--workspace",
+          "${workspaceFolder}"
+        ]
+      }
+    },
+    {
+      "name": "filesystem",
+      "type": "community",
+      "enabled": true,
+      "package": "@modelcontextprotocol/server-filesystem",
+      "runtime": "node",
+      "config": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-filesystem",
+          "${workspaceFolder}"
+        ]
+      }
+    }
+  ]
+}
+

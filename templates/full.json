@@ -1,0 +1,87 @@
+{
+  "name": "full",
+  "description": "All features enabled - complete toolkit",
+  "author": "AIStack-MCP",
+  "version": "1.0.0",
+  "servers": [
+    {
+      "name": "code-intelligence",
+      "type": "custom",
+      "enabled": true,
+      "tools": ["all"],
+      "config": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "python",
+          "${workspaceFolder}/../AIStack-MCP/mcp_intelligence_server.py",
+          "--workspace",
+          "${workspaceFolder}"
+        ]
+      }
+    },
+    {
+      "name": "filesystem",
+      "type": "community",
+      "enabled": true,
+      "package": "@modelcontextprotocol/server-filesystem",
+      "runtime": "node",
+      "config": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-filesystem",
+          "${workspaceFolder}"
+        ]
+      }
+    },
+    {
+      "name": "github",
+      "type": "community",
+      "enabled": true,
+      "package": "@modelcontextprotocol/server-github",
+      "runtime": "node",
+      "requires_env": ["GITHUB_PERSONAL_ACCESS_TOKEN"],
+      "config": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-github"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+        }
+      }
+    },
+    {
+      "name": "brave-search",
+      "type": "community",
+      "enabled": false,
+      "note": "Enable if you have Brave Search API key",
+      "package": "@modelcontextprotocol/server-brave-search",
+      "runtime": "node",
+      "requires_env": ["BRAVE_API_KEY"],
+      "config": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+        "env": {
+          "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+        }
+      }
+    },
+    {
+      "name": "postgres",
+      "type": "community",
+      "enabled": false,
+      "note": "Enable if you work with PostgreSQL",
+      "package": "@modelcontextprotocol/server-postgres",
+      "runtime": "node",
+      "requires_env": ["POSTGRES_URL"],
+      "config": {
+        "command": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-postgres"],
+        "env": {
+          "POSTGRES_URL": "${POSTGRES_URL}"
+        }
+      }
+    }
+  ]
+}
+
