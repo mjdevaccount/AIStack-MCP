@@ -1,0 +1,106 @@
+﻿{
+    "mcpServers":  {
+                       "github":  {
+                                      "command":  "npx",
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-github"
+                                               ],
+                                      "env":  {
+                                                  "GITHUB_PERSONAL_ACCESS_TOKEN":  "${GITHUB_TOKEN}"
+                                              }
+                                  },
+                       "filesystem":  {
+                                          "command":  "npx",
+                                          "args":  [
+                                                       "-y",
+                                                       "@modelcontextprotocol/server-filesystem",
+                                                       "${workspaceFolder}"
+                                                   ]
+                                      },
+                       "git":  {
+                                   "command":  "npx",
+                                   "args":  [
+                                                "-y",
+                                                "@modelcontextprotocol/server-git",
+                                                "--repository",
+                                                "${workspaceFolder}"
+                                            ]
+                               },
+                       "puppeteer":  {
+                                         "command":  "npx",
+                                         "args":  [
+                                                      "-y",
+                                                      "@modelcontextprotocol/server-puppeteer"
+                                                  ]
+                                     },
+                       "brave-search":  {
+                                            "command":  "npx",
+                                            "args":  [
+                                                         "-y",
+                                                         "@modelcontextprotocol/server-brave-search"
+                                                     ]
+                                        },
+                       "slack":  {
+                                     "command":  "npx",
+                                     "args":  [
+                                                  "-y",
+                                                  "@modelcontextprotocol/server-slack"
+                                              ],
+                                     "env":  {
+                                                 "SLACK_BOT_TOKEN":  "${SLACK_BOT_TOKEN}"
+                                             }
+                                 },
+                       "postgres":  {
+                                        "command":  "npx",
+                                        "args":  [
+                                                     "-y",
+                                                     "@modelcontextprotocol/server-postgres",
+                                                     "postgresql://localhost/postgres"
+                                                 ]
+                                    },
+                       "notion":  {
+                                      "command":  "npx",
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-notion"
+                                               ],
+                                      "env":  {
+                                                  "NOTION_API_KEY":  "${NOTION_API_KEY}"
+                                              }
+                                  },
+                       "sequential-thinking":  {
+                                                   "command":  "npx",
+                                                   "args":  [
+                                                                "-y",
+                                                                "@modelcontextprotocol/server-sequential-thinking"
+                                                            ]
+                                               },
+                       "memory":  {
+                                      "command":  "npx",
+                                      "args":  [
+                                                   "-y",
+                                                   "@modelcontextprotocol/server-memory"
+                                               ]
+                                  },
+                       "fetch":  {
+                                     "command":  "npx",
+                                     "args":  [
+                                                  "-y",
+                                                  "@modelcontextprotocol/server-fetch"
+                                              ]
+                                 },
+                       "code-intelligence":  {
+                                                 "command":  "python",
+                                                 "args":  [
+                                                              "C:\\AIStack-MCP\\mcp_intelligence_server.py",
+                                                              "--workspace",
+                                                              "${workspaceFolder}"
+                                                          ],
+                                                 "env":  {
+                                                             "OLLAMA_URL":  "http://localhost:11434",
+                                                             "QDRANT_URL":  "http://localhost:6333"
+                                                         }
+                                             }
+                   }
+}
