@@ -108,6 +108,17 @@ catch {
     exit 1
 }
 
+# Write mode indicator file
+$ModeFile = Join-Path $CorePath ".cursor\ACTIVE_MODE.txt"
+$ModeContent = @"
+mode: multi-repo
+repos: $($DiscoveredRepos -join ', ')
+updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+core_path: $CorePath
+"@
+Set-Content -Path $ModeFile -Value $ModeContent -Encoding UTF8
+Write-Host "  ✓ Mode indicator: .cursor/ACTIVE_MODE.txt" -ForegroundColor Green
+
 Write-Host ""
 Write-Host ("=" * 70) -ForegroundColor Green
 Write-Host "  ✅ MULTI-REPO MODE ACTIVATED" -ForegroundColor Green
@@ -115,6 +126,8 @@ Write-Host ("=" * 70) -ForegroundColor Green
 Write-Host ""
 Write-Host "  Linked repos: $($DiscoveredRepos.Count)" -ForegroundColor White
 $DiscoveredRepos | ForEach-Object { Write-Host "    - $_" -ForegroundColor White }
+Write-Host ""
+Write-Host "  Mode indicator: .cursor/ACTIVE_MODE.txt" -ForegroundColor DarkGray
 Write-Host ""
 Write-Host "  Next steps:" -ForegroundColor Cyan
 Write-Host "    1. Restart Cursor completely (close all windows)" -ForegroundColor White

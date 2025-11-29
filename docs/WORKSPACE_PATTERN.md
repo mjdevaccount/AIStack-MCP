@@ -213,11 +213,20 @@ The workspace pattern implementation includes these files:
 
 | File | Purpose |
 |------|---------|
-| `.cursor/mcp.json` | Fixed config using `${workspaceFolder}` |
-| `scripts/validate_workspace.py` | Command-line diagnostic tool |
+| `.cursor/mcp.json` | MCP server configuration |
+| `.cursor/ACTIVE_MODE.txt` | Current mode indicator (auto-generated) |
+| `scripts/mcp_config_builder.py` | Interactive/CLI config generator |
+| `scripts/switch_to_single_repo.ps1` | Activate single-repo mode |
+| `scripts/switch_to_multi_repo.ps1` | Activate multi-repo mode |
+| `scripts/link_repo.ps1` | Helper to link repos into workspaces/ |
+| `scripts/validate_mcp_config.py` | Config validation for CI |
+| `scripts/validate_workspace.py` | Workspace diagnostic tool |
+| `scripts/dev_all.ps1` | Development environment status/launcher |
 | `scripts/launch_mcp_for_repo.ps1` | Per-repo launcher script |
 | `scripts/test_workspace_pattern.py` | Integration tests |
+| `workspaces/` | Linked repositories for multi-repo mode |
 | `docs/WORKSPACE_PATTERN.md` | This documentation |
+| `docs/BEST_PRACTICES.md` | Team usage guidelines |
 | `mcp_intelligence_server.py` | Server with `validate_workspace_config` tool |
 
 ## Quick Reference

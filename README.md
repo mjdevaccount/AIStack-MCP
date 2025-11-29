@@ -136,7 +136,10 @@ AIStack-MCP/
 │   ├── mcp_config_builder.py     # Config generator (single/multi-repo)
 │   ├── switch_to_multi_repo.ps1  # Activate multi-repo mode
 │   ├── switch_to_single_repo.ps1 # Activate single-repo mode
+│   ├── link_repo.ps1             # Helper to link repos
+│   ├── validate_mcp_config.py    # Config validation (CI-ready)
 │   ├── validate_workspace.py     # Workspace validation tool
+│   ├── dev_all.ps1               # Dev environment status
 │   ├── test_workspace_pattern.py # Integration tests
 │   └── launch_mcp_for_repo.ps1   # Per-repo launcher
 ├── workspaces/                   # Linked repos for multi-repo mode
@@ -295,21 +298,29 @@ This only needs to run once per project.
 ## Quick Reference
 
 ```powershell
-# Single-repo mode (portable, isolated)
-.\scripts\switch_to_single_repo.ps1
+# Mode switching
+.\scripts\switch_to_single_repo.ps1         # Isolated, portable mode
+.\scripts\switch_to_multi_repo.ps1          # CORE orchestration mode
 
-# Multi-repo mode (CORE orchestration)
-.\scripts\switch_to_multi_repo.ps1
+# Repo management
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\my-app"  # Link a repo
 
-# Interactive config builder
-python scripts\mcp_config_builder.py
+# Configuration
+python scripts\mcp_config_builder.py        # Interactive config builder
+python scripts\validate_mcp_config.py       # Validate config (CI-ready)
 
-# Validate workspace configuration
-python scripts\validate_workspace.py --workspace C:\AIStack-MCP
+# Development environment
+.\scripts\dev_all.ps1 -CheckOnly            # Check service status
+
+# Check current mode
+Get-Content .cursor\ACTIVE_MODE.txt
 
 # In Cursor chat
 Use code-intelligence to validate_workspace_config
+Use code-intelligence to index_workspace
 ```
+
+See [docs/BEST_PRACTICES.md](docs/BEST_PRACTICES.md) for team usage guidelines.
 
 ## Cost Comparison
 

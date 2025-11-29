@@ -9,7 +9,20 @@ can orchestrate MCP servers across multiple codebases simultaneously.
 
 ## Linking Repositories
 
-### Option 1: Symbolic Links (Recommended)
+### Option 1: Helper Script (Recommended)
+
+```powershell
+# Link an existing repository
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\my-repo"
+
+# Link with custom name
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\my-repo" -Name "backend"
+
+# Clone instead of symlink (no admin required)
+.\scripts\link_repo.ps1 -TargetPath "https://github.com/you/repo" -Clone
+```
+
+### Option 2: Manual Symbolic Links
 
 Run PowerShell **as Administrator**:
 

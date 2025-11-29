@@ -65,12 +65,25 @@ catch {
     exit 1
 }
 
+# Write mode indicator file
+$ModeFile = Join-Path $WorkspacePath ".cursor\ACTIVE_MODE.txt"
+$ModeContent = @"
+mode: single-repo
+workspace: $WorkspacePath
+updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+portable: true
+"@
+Set-Content -Path $ModeFile -Value $ModeContent -Encoding UTF8
+Write-Host "  ✓ Mode indicator: .cursor/ACTIVE_MODE.txt" -ForegroundColor Green
+
 Write-Host ""
 Write-Host ("=" * 70) -ForegroundColor Green
 Write-Host "  ✅ SINGLE-REPO MODE ACTIVATED" -ForegroundColor Green
 Write-Host ("=" * 70) -ForegroundColor Green
 Write-Host ""
 Write-Host "  Config uses `${workspaceFolder}` - fully portable!" -ForegroundColor White
+Write-Host ""
+Write-Host "  Mode indicator: .cursor/ACTIVE_MODE.txt" -ForegroundColor DarkGray
 Write-Host ""
 Write-Host "  Next steps:" -ForegroundColor Cyan
 Write-Host "    1. Restart Cursor completely (close all windows)" -ForegroundColor White
