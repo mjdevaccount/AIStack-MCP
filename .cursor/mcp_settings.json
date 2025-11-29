@@ -1,80 +1,53 @@
 {
   "mcpServers": {
     "filesystem": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "mcp-filesystem",
-        "mcp-server-filesystem"
-      ],
-      "description": "File operations - read, write, search, directory tree"
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\AIStack"]
     },
     "git": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "mcp-git",
-        "mcp-server-git"
-      ],
-      "description": "Git operations - history, diff, branches, status"
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "C:\\AIStack"]
     },
     "github": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "mcp-github",
-        "mcp-server-github"
-      ],
-      "description": "GitHub API - PRs, issues, commits, branches"
-    },
-    "sequential-thinking": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "mcp-sequential-thinking",
-        "mcp-server-sequential-thinking"
-      ],
-      "description": "Advanced reasoning for complex multi-step tasks"
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
+      }
     },
     "brave-search": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "mcp-brave-search",
-        "mcp-server-brave-search"
-      ],
-      "description": "Web search for research and documentation (optional)"
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "your_brave_key_optional"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@localhost/db"]
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
     "memory": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "mcp-memory",
-        "mcp-server-memory"
-      ],
-      "description": "Persistent context across sessions (optional)"
-    }
-  },
-  
-  "rules": {
-    "tokenOptimization": {
-      "preferCompressedContext": true,
-      "maxFileSize": 50000,
-      "autoSummarize": true
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     },
-    "toolPriority": [
-      "sequential-thinking",
-      "filesystem", 
-      "git",
-      "github",
-      "brave-search"
-    ]
+    "everart": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everart"],
+      "env": {
+        "EVERART_API_KEY": "optional"
+      }
+    }
   }
 }
-
