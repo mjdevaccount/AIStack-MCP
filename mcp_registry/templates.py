@@ -160,6 +160,9 @@ class TemplateEngine:
         # Backup existing config
         if output_path.exists():
             backup_path = output_path.with_suffix(".json.backup")
+            # Remove existing backup if it exists
+            if backup_path.exists():
+                backup_path.unlink()
             output_path.rename(backup_path)
             logger.info(f"Backed up existing config to {backup_path}")
         
@@ -228,13 +231,30 @@ class TemplateEngine:
         
         # Replace ${workspaceFolder} placeholder in args
         args = []
+        import os
         for arg in base_config.get("args", []):
-            if "${workspaceFolder}" in arg:
+            # First, handle the combined pattern ${workspaceFolder}/../AIStack-MCP
+            if "${workspaceFolder}/../AIStack-MCP" in arg:
+                # If workspace and aistack are the same, just use aistack_path
+                if workspace.resolve() == aistack_path.resolve():
+                    arg = arg.replace("${workspaceFolder}/../AIStack-MCP", str(aistack_path))
+                else:
+                    # Resolve the relative path properly
+                    resolved = (workspace / "../AIStack-MCP").resolve()
+                    arg = arg.replace("${workspaceFolder}/../AIStack-MCP", str(resolved))
+            elif "${workspaceFolder}" in arg:
                 # Replace with actual workspace path
                 arg = arg.replace("${workspaceFolder}", str(workspace))
-            if "../AIStack-MCP" in arg:
-                # Replace with actual AIStack path
+            # Replace standalone AIStack path references
+            if "../AIStack-MCP" in arg and "${workspaceFolder}" not in arg:
+                # Replace relative path with actual AIStack path
                 arg = arg.replace("../AIStack-MCP", str(aistack_path))
+            # Normalize path separators (fix mixed / and \)
+            if os.path.sep in arg or "/" in arg or "\\" in arg:
+                # Normalize the path
+                normalized = os.path.normpath(arg.replace("/", os.path.sep).replace("\\", os.path.sep))
+                # Convert back to forward slashes for JSON (Windows compatibility)
+                arg = normalized.replace("\\", "/")
             args.append(arg)
         
         config = {
