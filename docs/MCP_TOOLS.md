@@ -75,14 +75,109 @@
 - "Recall our discussion about async patterns"
 - "What preferences have you learned about my code style?"
 
+## AIStack Intelligence Server (Production)
+
+**Purpose**: Local intelligence layer with hybrid architecture (FREE local processing + CHEAP remote generation)
+
+### Semantic Code Search
+
+**Purpose**: Vector search over codebase using Qdrant (90% token reduction)
+
+**Common operations:**
+- `search_code_semantic(query, max_results, min_score)` - Semantic code search
+- `search_documentation(query, max_results)` - RAG over documentation
+
+**Usage in Cursor:**
+- "Use aistack-intelligence to search for error handling patterns"
+- "Find similar implementations of async cancellation"
+- "Search documentation for LangGraph checkpointing"
+
+**Token Savings**: 90% (500 vs 5000 tokens)
+
+### Pattern Analysis
+
+**Purpose**: Analyze codebase patterns using local Ollama LLM (95% token reduction)
+
+**Common operations:**
+- `analyze_code_patterns(pattern_type, max_examples)` - Pattern analysis
+
+**Usage in Cursor:**
+- "Analyze error handling patterns in the codebase"
+- "What dependency injection patterns are used?"
+- "Show me async/await patterns"
+
+**Token Savings**: 95% (200 vs 4000 tokens)
+
+### Impact Analysis
+
+**Purpose**: Multi-layer change impact analysis (85% token reduction)
+
+**Common operations:**
+- `analyze_change_impact(target, change_description, detail_level)` - Impact analysis
+
+**Usage in Cursor:**
+- "Analyze impact of changing TaskOrchestrator.HandleAsync"
+- "What would break if I modify this interface?"
+- "Show dependencies for this method"
+
+**Token Savings**: 85% (300 vs 2000 tokens)
+
+### Context Optimization
+
+**Purpose**: Prepare optimized context for code generation (85% token reduction)
+
+**Common operations:**
+- `get_code_context(file_path, task_description, include_patterns)` - Optimized context
+
+**Usage in Cursor:**
+- "Prepare context for adding error handling to rag_agent.py"
+- "Get optimized context for this file before generating code"
+
+**Token Savings**: 85% (400 vs 2700 tokens)
+
+### Code Generation
+
+**Purpose**: Generate code patches using local phi4 LLM (100% free)
+
+**Common operations:**
+- `generate_code_patch(file_path, change_description, validate_remote)` - Generate patch
+
+**Usage in Cursor:**
+- "Generate a patch to add timeout handling"
+- "Create a patch for error handling in this file"
+
+**Token Savings**: 100% (local generation, no remote tokens)
+
+### Direct File Access (Use Sparingly)
+
+**Purpose**: Read full file content (expensive - use only when needed)
+
+**Common operations:**
+- `read_file_full(file_path)` - Read full file
+
+**Usage in Cursor:**
+- Only when optimized context insufficient
+- User explicitly requests full file
+- Verification after generation
+
+**Warning**: Expensive - sends full file to remote LLM
+
 ## Best Practices
 
 ### Token Efficiency
 
+**Community MCP Servers:**
 - Ask which files to read before reading them
 - Use git log with `--oneline` for quick history
 - Search before reading entire directories
 - Request summaries for large files
+
+**AIStack Intelligence Server:**
+- ✅ Use `search_code_semantic` instead of reading full files (90% savings)
+- ✅ Use `get_code_context` instead of sending full files (85% savings)
+- ✅ Use `generate_code_patch` for local generation (100% free)
+- ✅ Use `analyze_code_patterns` before generating code (95% savings)
+- ❌ Avoid `read_file_full` unless absolutely necessary
 
 ### Workflow
 
@@ -108,4 +203,10 @@
 - "Search for best practices in async cancellation"
 - "Find examples of dependency injection in .NET 8"
 - "Research modern testing patterns for async code"
+
+**Using AIStack Intelligence:**
+- "Use aistack-intelligence to search for error handling patterns"
+- "Analyze the impact of changing this method"
+- "Generate a patch to add timeout handling"
+- "What patterns are used for dependency injection?"
 

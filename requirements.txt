@@ -1,0 +1,20 @@
+# Portable MCP Toolkit Dependencies
+
+# MCP Framework
+fastmcp>=0.2.0
+
+# Local LLM (Ollama)
+langchain-ollama>=0.2.0
+
+# Vector Database
+qdrant-client>=1.11.0
+
+# Logging
+loguru>=0.7.0
+
+# HTTP requests (for embeddings)
+requests>=2.31.0
+
+
+
+

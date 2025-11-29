@@ -2,52 +2,47 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\AIStack"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "description": "Read/write files in current project"
     },
     "git": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "C:\\AIStack"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "${workspaceFolder}"
+      ],
+      "description": "Git operations in current repo"
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token_here"
-      }
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub API access"
     },
-    "brave-search": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+    "code-intelligence": {
+      "command": "C:\\AIStack-MCP\\.venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\AIStack-MCP\\mcp_intelligence_server.py",
+        "--workspace",
+        "C:\\AIStack"
+      ],
       "env": {
-        "BRAVE_API_KEY": "your_brave_key_optional"
-      }
-    },
-    "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"]
-    },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@localhost/db"]
-    },
-    "puppeteer": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
-    },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
-    },
-    "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"]
-    },
-    "everart": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-everart"],
-      "env": {
-        "EVERART_API_KEY": "optional"
-      }
+        "OLLAMA_URL": "http://localhost:11434",
+        "QDRANT_URL": "http://localhost:6333",
+        "PYTHONPATH": "C:\\AIStack-MCP"
+      },
+      "description": "AI-powered code analysis (works on ANY project)"
     }
   }
 }

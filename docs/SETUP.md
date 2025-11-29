@@ -109,3 +109,6 @@ docker-compose restart
 - Configure .cursorrules for your project patterns
 - Test MCP tools in Cursor
 
+
+
+
