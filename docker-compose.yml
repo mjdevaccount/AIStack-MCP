@@ -1,4 +1,6 @@
-version: '3.8'
+# Docker Compose configuration for MCP servers
+# Note: Update image names with actual MCP server implementations
+# See: https://modelcontextprotocol.io/ for official MCP servers
 
 services:
   # ============================================================================
