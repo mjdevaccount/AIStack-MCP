@@ -1,0 +1,55 @@
+# Coverage configuration for AIStack-MCP
+
+[run]
+source = .
+branch = True
+omit =
+    */tests/*
+    */venv/*
+    */.venv/*
+    */site-packages/*
+    */__pycache__/*
+    */conftest.py
+    setup.py
+    scripts/test_*.py
+
+[report]
+precision = 2
+skip_empty = True
+show_missing = True
+sort = Cover
+
+exclude_lines =
+    # Standard pragma
+    pragma: no cover
+    
+    # Don't complain about missing debug code
+    def __repr__
+    def __str__
+    
+    # Don't complain if tests don't hit defensive assertion code
+    raise AssertionError
+    raise NotImplementedError
+    
+    # Don't complain if non-runnable code isn't run
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    if typing.TYPE_CHECKING:
+    
+    # Don't complain about abstract methods
+    @abstractmethod
+    @abc.abstractmethod
+    
+    # Don't complain about overloads
+    @overload
+    
+    # Don't complain about ellipsis in stubs
+    \.\.\.
+
+[html]
+directory = htmlcov
+title = AIStack-MCP Coverage Report
+
+[xml]
+output = coverage.xml
+
