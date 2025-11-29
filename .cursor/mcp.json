@@ -10,7 +10,6 @@
         "C:\\AIStack-MCP"
       ],
       "env": {
-        "PYTHONPATH": "C:\\AIStack-MCP",
         "OLLAMA_URL": "http://localhost:11434",
         "QDRANT_URL": "http://localhost:6333",
         "AISTACK_ROOT": "C:\\AIStack-MCP"
