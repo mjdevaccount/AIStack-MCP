@@ -27,6 +27,47 @@ You have access to the codebase via MCP protocol with these tools:
 - Summarize large files before suggesting changes
 - Prefer targeted searches over reading entire directories
 
+### MCP Environment Self-Test
+
+**Before starting work, verify the MCP environment is properly configured:**
+
+```powershell
+# Quick self-test of MCP environment
+python scripts/test_mcp_environment.py
+
+# Verbose output with details
+python scripts/test_mcp_environment.py --verbose
+
+# Test specific server only
+python scripts/test_mcp_environment.py --server aistack-intelligence
+```
+
+**What the self-test discovers automatically:**
+- MCP servers configured in `.cursor/mcp.json`
+- Service dependencies (Ollama, Qdrant, etc.) from environment variables
+- Service health checks (HTTP endpoints)
+- Server configuration validation
+- Workspace accessibility
+
+**The script follows SOLID principles:**
+- **Single Responsibility**: Each checker handles one concern
+- **Open/Closed**: Easy to add new service checkers without modifying existing code
+- **Liskov Substitution**: All checkers implement consistent interface
+- **Interface Segregation**: Separate concerns (discovery, checking, reporting)
+- **Dependency Inversion**: Depends on configuration abstraction, not hardcoded values
+
+**If self-test fails:**
+1. Review failed checks in output
+2. Ensure required services are running (docker-compose up)
+3. Verify MCP configuration matches actual setup
+4. Check Cursor logs: Help > Toggle Developer Tools > Console
+
+**The script is self-discovering** - it reads `.cursor/mcp.json` and extracts:
+- Server names and configurations
+- Service URLs from `env` variables (pattern: `*_URL`, `*_HOST`)
+- Workspace paths from server arguments
+- No hardcoded values - fully maintainable
+
 ## Code Standards
 
 ### Architecture
