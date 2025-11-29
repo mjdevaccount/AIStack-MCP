@@ -144,17 +144,17 @@ def write_config(config: Dict, output_path: Path, backup: bool = True) -> bool:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_path = output_path.with_suffix(f".json.backup_{timestamp}")
             shutil.copy2(output_path, backup_path)
-            print(f"  ✓ Backed up existing config to: {backup_path.name}")
+            print(f"  [OK] Backed up existing config to: {backup_path.name}")
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=2)
         
-        print(f"  ✓ Generated config: {output_path}")
+        print(f"  [OK] Generated config: {output_path}")
         return True
     except Exception as e:
-        print(f"  ✗ Failed to write config: {e}")
+        print(f"  [ERROR] Failed to write config: {e}")
         return False
 
 
@@ -187,7 +187,7 @@ def interactive_mode():
         workspace_path = Path(workspace).resolve()
         
         if not workspace_path.exists():
-            print(f"\n  ✗ Path does not exist: {workspace_path}")
+            print(f"\n  [ERROR] Path does not exist: {workspace_path}")
             return
         
         config = build_single_repo_config(workspace_path)
@@ -215,7 +215,7 @@ def interactive_mode():
         core_path = Path(core_path_str).resolve()
         
         if not core_path.exists():
-            print(f"\n  ✗ CORE path does not exist: {core_path}")
+            print(f"\n  [ERROR] CORE path does not exist: {core_path}")
             return
         
         print()
@@ -228,14 +228,14 @@ def interactive_mode():
             
             repo_path = Path(repo).resolve()
             if not repo_path.exists():
-                print(f"      ⚠ Path does not exist: {repo_path}")
+                print(f"      [WARN] Path does not exist: {repo_path}")
                 continue
             
             repo_paths.append(repo_path)
-            print(f"      ✓ Added: {repo_path.name}")
+            print(f"      [OK] Added: {repo_path.name}")
         
         if not repo_paths:
-            print("\n  ✗ No repositories specified")
+            print("\n  [ERROR] No repositories specified")
             return
         
         print()
@@ -261,7 +261,7 @@ def interactive_mode():
             print(f"  Linked repos ({len(repo_paths)}):")
             for repo in repo_paths:
                 link_path = workspaces_dir / repo.name
-                status = "✓ linked" if link_path.exists() else "○ needs link"
+                status = "[linked]" if link_path.exists() else "[needs link]"
                 print(f"    - {repo.name} [{status}]")
             print()
             print(f"  Config: {output_path}")
@@ -283,7 +283,7 @@ def interactive_mode():
             print("    3. All MCP servers will launch with multi-repo access")
     
     else:
-        print("\n  ✗ Invalid choice")
+        print("\n  [ERROR] Invalid choice")
 
 
 def main():
@@ -319,12 +319,12 @@ Examples:
     
     if args.single:
         if not args.workspace:
-            print("✗ --workspace required for single mode")
+            print("[ERROR] --workspace required for single mode")
             sys.exit(1)
         
         workspace_path = Path(args.workspace).resolve()
         if not workspace_path.exists():
-            print(f"✗ Workspace path does not exist: {workspace_path}")
+            print(f"[ERROR] Workspace path does not exist: {workspace_path}")
             sys.exit(1)
         
         config = build_single_repo_config(workspace_path)
@@ -336,18 +336,18 @@ Examples:
         
         if success:
             print()
-            print(f"✓ Single-repo config written to: {output_path}")
+            print(f"[OK] Single-repo config written to: {output_path}")
         else:
             sys.exit(1)
         
     elif args.multi:
         if not args.core or not args.repos:
-            print("✗ --core and --repos required for multi mode")
+            print("[ERROR] --core and --repos required for multi mode")
             sys.exit(1)
         
         core_path = Path(args.core).resolve()
         if not core_path.exists():
-            print(f"✗ CORE path does not exist: {core_path}")
+            print(f"[ERROR] CORE path does not exist: {core_path}")
             sys.exit(1)
         
         repo_paths = [Path(r).resolve() for r in args.repos]
@@ -355,7 +355,7 @@ Examples:
         # Validate repo paths
         for repo_path in repo_paths:
             if not repo_path.exists():
-                print(f"✗ Repository path does not exist: {repo_path}")
+                print(f"[ERROR] Repository path does not exist: {repo_path}")
                 sys.exit(1)
         
         config = build_multi_repo_config(core_path, repo_paths, use_relative_paths=not args.absolute)
@@ -369,10 +369,10 @@ Examples:
             # Ensure workspaces directory exists
             workspaces_dir = core_path / "workspaces"
             workspaces_dir.mkdir(exist_ok=True)
-            print(f"  ✓ Ensured workspaces directory: {workspaces_dir}")
+            print(f"  [OK] Ensured workspaces directory: {workspaces_dir}")
             
             print()
-            print(f"✓ Multi-repo config written to: {output_path}")
+            print(f"[OK] Multi-repo config written to: {output_path}")
             print(f"  Linked repos: {len(repo_paths)}")
             for repo in repo_paths:
                 print(f"    - {repo.name}")

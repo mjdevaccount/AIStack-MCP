@@ -40,7 +40,7 @@ class ValidationError:
         self.path = path
     
     def __str__(self):
-        prefix = {"error": "✗", "warning": "⚠", "info": "ℹ"}[self.level]
+        prefix = {"error": "[ERROR]", "warning": "[WARN]", "info": "[INFO]"}[self.level]
         if self.path:
             return f"  {prefix} [{self.path}] {self.message}"
         return f"  {prefix} {self.message}"
@@ -207,7 +207,7 @@ def test_config_generation(core_path: Path, verbose: bool = False) -> Tuple[bool
             messages.extend([str(e) for e in errors if e.level == "error"])
             return False, messages
         
-        messages.append("✓ Single-repo generation: PASSED")
+        messages.append("[OK] Single-repo generation: PASSED")
     
     # Test multi-repo generation (with mock repos)
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -247,7 +247,7 @@ def test_config_generation(core_path: Path, verbose: bool = False) -> Tuple[bool
             messages.extend([str(e) for e in errors if e.level == "error"])
             return False, messages
         
-        messages.append("✓ Multi-repo generation: PASSED")
+        messages.append("[OK] Multi-repo generation: PASSED")
     
     return True, messages
 
