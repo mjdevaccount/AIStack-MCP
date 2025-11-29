@@ -197,12 +197,163 @@ public async Task<string> ProcessAsync(CancellationToken ct)
 }
 ```
 
+## Git & GitHub Workflow
+
+### Branch Protection is ENABLED
+
+**The `main` branch is protected.** Direct pushes are blocked. All changes require PRs.
+
+### NEVER Do This
+
+```powershell
+# WRONG - will be rejected
+git push origin main
+git push -f origin main
+```
+
+### ALWAYS Do This
+
+```powershell
+# 1. Create feature branch
+git checkout -b feature/my-change
+
+# 2. Make changes and commit
+git add .
+git commit -m "feat: description of change"
+
+# 3. Push branch
+git push -u origin feature/my-change
+
+# 4. Create PR
+gh pr create --title "feat: description" --body "Details here"
+
+# 5. Wait for CI to pass, then merge
+gh pr merge --squash --delete-branch
+```
+
+### Branch Naming Conventions
+
+| Type | Pattern | Example |
+|------|---------|---------|
+| Feature | `feature/description` | `feature/add-retry-logic` |
+| Bugfix | `fix/description` | `fix/search-timeout` |
+| Docs | `docs/description` | `docs/update-readme` |
+| Chore | `chore/description` | `chore/update-deps` |
+
+### Commit Message Format
+
+```
+type: short description
+
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- chore: Maintenance
+- test: Tests
+- refactor: Code refactoring
+```
+
+### Before Creating a PR
+
+1. Pull latest main: `git pull origin main`
+2. Rebase if needed: `git rebase main`
+3. Run tests: `pytest tests/unit/ -v`
+4. Check for conflicts
+
+### Dependabot Automation
+
+Dependabot automatically creates PRs for dependency updates:
+
+- **Minor/Patch updates**: Auto-merged after CI passes
+- **Major updates**: Require manual review
+
+**When you see Dependabot PRs:**
+- They will auto-merge if CI passes (minor/patch)
+- Review major version bumps manually
+- Use `gh pr merge <number> --squash` if needed
+
+### Checking PR Status
+
+```powershell
+# List open PRs
+gh pr list
+
+# Check PR status
+gh pr status
+
+# View specific PR
+gh pr view <number>
+
+# Check CI status on PR
+gh pr checks <number>
+```
+
+### Merging PRs
+
+```powershell
+# Merge after CI passes (squash recommended)
+gh pr merge <number> --squash --delete-branch
+
+# Or merge with merge commit
+gh pr merge <number> --merge --delete-branch
+```
+
+### Handling Merge Conflicts
+
+```powershell
+# Update your branch with latest main
+git checkout feature/my-branch
+git fetch origin
+git rebase origin/main
+
+# Resolve conflicts, then
+git add .
+git rebase --continue
+git push --force-with-lease
+```
+
+### Emergency Bypass (Admin Only)
+
+If you absolutely must push directly (not recommended):
+```powershell
+# You'll get a warning but can bypass as admin
+git push origin main
+# GitHub will warn but allow it
+```
+
+## CI/CD Pipeline
+
+### What Runs on Every PR
+
+| Workflow | Purpose | Must Pass |
+|----------|---------|-----------|
+| `test.yml` | Unit tests (88 tests) | Yes |
+| `lint.yml` | Code style | No (warnings only) |
+| `validate-config.yml` | MCP config | No |
+
+### Checking CI Locally Before PR
+
+```powershell
+# Run tests
+pytest tests/unit/ -v
+
+# Check linting (optional)
+flake8 . --count --select=E9,F63,F7,F82 --show-source
+
+# Format code
+black .
+isort .
+```
+
 ## Remember
 
 - Use MCP tools to understand context first
 - Match existing patterns found in codebase
 - Ask before making significant architectural changes
 - Test thoroughly before suggesting code
+- **ALWAYS use PRs** - never push directly to main
+- **Check for Dependabot PRs** before making related changes
+- **Run tests locally** before creating PRs
 
 
 
