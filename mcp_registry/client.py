@@ -54,76 +54,118 @@ class MCPRegistryClient:
         category: Optional[str] = None,
         runtime: Optional[str] = None,
         limit: int = 100,
-        use_cache: bool = True
+        use_cache: bool = True,
+        fetch_all: bool = False
     ) -> List[Dict]:
         """
-        List servers from registry.
+        List servers from registry with pagination support.
         
         Args:
             search: Search query (searches name, description, tags)
             category: Filter by category (database, productivity, devops, etc.)
             runtime: Filter by runtime (node, python, docker)
-            limit: Maximum number of results
+            limit: Results per page (max 100, API limit)
             use_cache: Use cached results if available
+            fetch_all: Fetch all pages (may take time for 2000+ servers)
             
         Returns:
-            List of server metadata dictionaries
+            List of server metadata dictionaries (normalized structure)
             
         Example:
             >>> client.list_servers(search="database", limit=10)
             [
                 {
-                    "id": "io.modelcontextprotocol/server-postgres",
-                    "name": "PostgreSQL MCP Server",
+                    "name": "io.modelcontextprotocol/server-postgres",
                     "description": "Connect to PostgreSQL databases",
-                    "runtime": "node",
                     ...
                 }
             ]
         """
-        cache_key = f"list_{search}_{category}_{runtime}_{limit}"
+        cache_key = f"list_{search}_{category}_{runtime}_{limit}_{fetch_all}"
         
         if use_cache and self._is_cache_valid(cache_key):
             logger.info(f"Using cached results for: {cache_key}")
             return self._cache[cache_key]["data"]
         
-        # Build query parameters
-        params = {"limit": limit}
-        if search:
-            params["search"] = search
-        if category:
-            params["category"] = category
-        if runtime:
-            params["runtime"] = runtime
+        all_servers = []
+        page_size = min(limit, 100)  # API max is 100 per page
+        cursor = None  # Cursor-based pagination
+        max_iterations = 25 if fetch_all else 1  # Safety limit
         
-        try:
-            logger.info(f"Fetching servers from registry: {params}")
-            response = requests.get(
-                f"{self.BASE_URL}/servers",
-                params=params,
-                timeout=10
-            )
-            response.raise_for_status()
+        for iteration in range(max_iterations):
+            # Build query parameters
+            params = {"limit": page_size}
+            if cursor:
+                params["cursor"] = cursor
+            if search:
+                params["search"] = search
+            if category:
+                params["category"] = category
+            if runtime:
+                params["runtime"] = runtime
             
-            data = response.json()
-            servers = data.get("servers", [])
-            
-            # Cache the results
-            self._cache[cache_key] = {
-                "data": servers,
-                "timestamp": datetime.now().isoformat()
-            }
-            self._save_cache()
-            
-            return servers
-            
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Failed to fetch servers: {e}")
-            # Try to return cached data even if expired
-            if cache_key in self._cache:
-                logger.warning("Using expired cache due to network error")
-                return self._cache[cache_key]["data"]
-            return []
+            try:
+                logger.info(f"Fetching from registry (iteration {iteration + 1}): {params}")
+                response = requests.get(
+                    f"{self.BASE_URL}/servers",
+                    params=params,
+                    timeout=10
+                )
+                response.raise_for_status()
+                
+                data = response.json()
+                servers = data.get("servers", [])
+                metadata = data.get("metadata", {})
+                next_cursor = metadata.get("nextCursor")
+                
+                if not servers:
+                    logger.info("No more servers found")
+                    break
+                
+                # Unwrap nested structure if present
+                for server in servers:
+                    if "server" in server:
+                        # Nested: {"server": {...}, "_meta": {...}}
+                        clean = server["server"].copy()
+                        clean["_meta"] = server.get("_meta", {})
+                    else:
+                        clean = server
+                    all_servers.append(clean)
+                
+                # Check if we should continue pagination
+                if not fetch_all:
+                    # Only fetch first page if fetch_all is False
+                    break
+                
+                # Stop if no next cursor (last page)
+                if not next_cursor:
+                    logger.info("Last page reached: no nextCursor in metadata")
+                    break
+                
+                # Safety: Stop if we've fetched too many (2500+ servers)
+                if len(all_servers) >= 2500:
+                    logger.warning(f"Reached safety limit: {len(all_servers)} servers")
+                    break
+                
+                cursor = next_cursor
+                
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Failed to fetch (iteration {iteration + 1}): {e}")
+                # Try to return cached data even if expired
+                if cache_key in self._cache:
+                    logger.warning("Using expired cache due to network error")
+                    return self._cache[cache_key]["data"]
+                # Return what we have so far
+                break
+        
+        # Cache the results
+        self._cache[cache_key] = {
+            "data": all_servers,
+            "timestamp": datetime.now().isoformat()
+        }
+        self._save_cache()
+        
+        return all_servers
     
     def get_server(self, server_id: str, use_cache: bool = True) -> Optional[Dict]:
         """
@@ -201,19 +243,20 @@ class MCPRegistryClient:
         """
         return self.list_servers(category=category, limit=limit)
     
-    def get_popular(self, limit: int = 20) -> List[Dict]:
+    def get_popular(self, limit: int = 20, fetch_all: bool = False) -> List[Dict]:
         """
         Get most popular servers (sorted by downloads).
         
         Args:
             limit: Number of servers to return
+            fetch_all: Fetch all pages (may take time for 2000+ servers)
             
         Returns:
             List of popular servers
         """
-        return self.list_servers(limit=limit)
+        return self.list_servers(limit=limit, fetch_all=fetch_all)
     
-    def search_by_runtime(self, runtime: str, limit: int = 50) -> List[Dict]:
+    def search_by_runtime(self, runtime: str, limit: int = 50, fetch_all: bool = False) -> List[Dict]:
         """
         Search servers by runtime.
         
@@ -226,11 +269,94 @@ class MCPRegistryClient:
         Args:
             runtime: Runtime type
             limit: Maximum number of results
+            fetch_all: Fetch all pages (may take time for 2000+ servers)
             
         Returns:
             List of servers for runtime
         """
-        return self.list_servers(runtime=runtime, limit=limit)
+        return self.list_servers(runtime=runtime, limit=limit, fetch_all=fetch_all)
+    
+    def get_total_count(
+        self,
+        search: Optional[str] = None,
+        category: Optional[str] = None,
+        runtime: Optional[str] = None,
+        use_cache: bool = True
+    ) -> int:
+        """
+        Get total count of servers matching criteria.
+        
+        This method efficiently counts servers by fetching pages until
+        no more results are available. Results are cached.
+        
+        Args:
+            search: Search query
+            category: Filter by category
+            runtime: Filter by runtime
+            use_cache: Use cached count if available
+            
+        Returns:
+            Total number of servers matching criteria
+            
+        Example:
+            >>> client.get_total_count()
+            2000
+            >>> client.get_total_count(search="database")
+            15
+        """
+        cache_key = f"count_{search}_{category}_{runtime}"
+        
+        if use_cache and self._is_cache_valid(cache_key):
+            logger.info(f"Using cached count for: {cache_key}")
+            return self._cache[cache_key]["data"]
+        
+        total = 0
+        cursor = None
+        page_size = 100  # Max per page
+        
+        while True:
+            params = {"limit": page_size}
+            if cursor:
+                params["cursor"] = cursor
+            if search:
+                params["search"] = search
+            if category:
+                params["category"] = category
+            if runtime:
+                params["runtime"] = runtime
+            
+            try:
+                response = requests.get(
+                    f"{self.BASE_URL}/servers",
+                    params=params,
+                    timeout=10
+                )
+                response.raise_for_status()
+                
+                data = response.json()
+                servers = data.get("servers", [])
+                metadata = data.get("metadata", {})
+                next_cursor = metadata.get("nextCursor")
+                
+                total += len(servers)
+                
+                if not next_cursor or not servers:
+                    break
+                
+                cursor = next_cursor
+                
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Failed to count servers: {e}")
+                break
+        
+        # Cache the count
+        self._cache[cache_key] = {
+            "data": total,
+            "timestamp": datetime.now().isoformat()
+        }
+        self._save_cache()
+        
+        return total
     
     def clear_cache(self):
         """Clear all cached registry data."""

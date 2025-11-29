@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "aistack-intelligence": {
+    "code-intelligence": {
       "command": "cmd",
       "args": [
         "/c",
@@ -8,12 +8,7 @@
         "C:\\AIStack-MCP\\mcp_intelligence_server.py",
         "--workspace",
         "C:\\AIStack-MCP"
-      ],
-      "env": {
-        "OLLAMA_URL": "http://localhost:11434",
-        "QDRANT_URL": "http://localhost:6333",
-        "AISTACK_ROOT": "C:\\AIStack-MCP"
-      }
+      ]
     },
     "filesystem": {
       "command": "npx",
@@ -24,17 +19,37 @@
       ]
     },
     "github": {
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "C:\\AIStack-MCP\\scripts\\run_github_mcp.ps1"
+      ]
+    },
+    "jupyter": {
+      "command": "python",
+      "args": [
+        "-m",
+        "cursor_notebook_mcp.server",
+        "--transport",
+        "stdio",
+        "--allow-root",
+        "C:\\AIStack-MCP"
+      ]
+    },
+    "qdrant": {
       "command": "npx",
       "args": [
         "-y",
-        "dotenv-cli",
-        "-e",
-        "C:\\AIStack-MCP\\.env",
-        "--",
-        "npx",
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ]
+        "@rocklerson/openai-mcp-qdrant"
+      ],
+      "env": {
+        "QDRANT_URL": "http://localhost:6333",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}"
+      }
     }
   }
 }

@@ -124,7 +124,7 @@ print()
 
 # Apply template
 try:
-    dry_run_flag = $dryRunValue == 'True'
+    dry_run_flag = str($dryRunValue).lower() == 'true'
     result = engine.apply_template(
         '$Template',
         workspace,
