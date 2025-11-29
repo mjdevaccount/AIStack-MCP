@@ -77,3 +77,7 @@ Cursor might be failing to start the server but not showing errors.
 4. **Check for conflicting MCP configs** - Multiple config files might conflict
 
 
+
+
+
+
