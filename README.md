@@ -7,13 +7,39 @@
 *Dual-mode MCP orchestration that solves the isolation vs. coordination dilemma—local-first, production-ready, and 90% cheaper than cloud-only approaches.*
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](https://github.com/mjdevaccount/AIStack-MCP)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)](https://github.com/mjdevaccount/AIStack-MCP/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue?style=flat-square)](https://github.com/mjdevaccount/AIStack-MCP/releases)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey?style=flat-square)](https://github.com/mjdevaccount/AIStack-MCP)
 [![Python](https://img.shields.io/badge/python-3.8+-yellow?style=flat-square)](https://python.org)
 [![Code Style](https://img.shields.io/badge/code%20style-black-000000?style=flat-square)](https://github.com/psf/black)
 
 </div>
+
+---
+
+## 📊 Current Status (v1.2.0)
+
+**Latest Release:** v1.2.0 — MCP Registry Integration & Template System
+
+### What's New in v1.2.0
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| 🗂️ **MCP Registry** | ✅ **NEW** | Browse and install 500+ community MCP servers |
+| 📋 **Template System** | ✅ **NEW** | Pre-built configs (minimal, standard, full) |
+| 🔧 **Server Installer** | ✅ **NEW** | One-command installation for npm/PyPI/Docker servers |
+| 🔍 **Registry Search** | ✅ **NEW** | Search by keywords, category, runtime |
+| 🧠 **Code Intelligence** | ✅ Stable | Semantic search, pattern analysis, code generation |
+| 🔄 **Dual-Mode** | ✅ Stable | Single-repo isolation & multi-repo orchestration |
+| ✅ **88 Tests Passing** | ✅ Stable | Comprehensive test coverage |
+
+### Quick Stats
+
+- **Community Servers**: 500+ available via registry
+- **Templates**: 3 pre-built configurations
+- **Test Coverage**: 88 unit tests passing
+- **Documentation**: 15+ guides and troubleshooting docs
+- **Production Ready**: CI/CD validated, enterprise-tested
 
 ---
 
@@ -806,15 +832,19 @@ services:
 
 ## 🗺️ Roadmap
 
-### v1.0.0 — Current Release ✅
+### v1.2.0 — Current Release ✅
 
+- ✅ MCP Registry integration (browse 500+ community servers)
+- ✅ Template system (minimal, standard, full)
+- ✅ Server installer (npm, PyPI, Docker)
+- ✅ Community tools management scripts
 - ✅ Dual-mode orchestration (single/multi-repo)
 - ✅ Complete validation suite
 - ✅ Interactive setup wizard
 - ✅ Production-ready patterns
 - ✅ Comprehensive documentation
 
-### v1.1.0 — Planned
+### v1.3.0 — Planned
 
 - 🔲 VS Code extension support
 - 🔲 Additional LLM backends (Claude local, GPT4All)
