@@ -13,6 +13,14 @@ Provides AI-powered code intelligence for **any codebase** you open in Cursor:
 
 ## Quick Start
 
+### One-Command Setup (New Users)
+
+```powershell
+.\scripts\quickstart.ps1
+```
+
+This interactive wizard checks dependencies, selects your mode, and configures everything.
+
 ### 1. Install Dependencies
 
 **Node.js** (for community MCP servers)
@@ -133,6 +141,7 @@ AIStack-MCP/
 │   ├── SETUP.md                  # Setup guide
 │   └── troubleshooting/          # Troubleshooting guides
 ├── scripts/
+│   ├── quickstart.ps1            # Interactive setup wizard
 │   ├── mcp_config_builder.py     # Config generator (single/multi-repo)
 │   ├── switch_to_multi_repo.ps1  # Activate multi-repo mode
 │   ├── switch_to_single_repo.ps1 # Activate single-repo mode

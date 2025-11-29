@@ -78,10 +78,56 @@ workspaces/
 .\scripts\switch_to_single_repo.ps1
 ```
 
+## Real-World Examples
+
+### Python Multi-Package Project
+
+```powershell
+# Core library
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\mylib-core"
+
+# Application using core
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\mylib-app"
+
+# Shared tools/scripts
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\mylib-tools"
+```
+
+### Microservices Architecture
+
+```powershell
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\auth-service"
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\api-gateway"
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\user-service"
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\notification-service"
+```
+
+### Shared Infrastructure + Apps
+
+```powershell
+# Infrastructure code
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\infra-terraform" -Name "infra"
+
+# Shared libraries
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\shared-libs" -Name "libs"
+
+# Main application
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\main-app" -Name "app"
+```
+
+### Frontend + Backend Monorepo Style
+
+```powershell
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\frontend-react"
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\backend-fastapi"
+.\scripts\link_repo.ps1 -TargetPath "C:\Projects\shared-types"
+```
+
 ## Notes
 
 - Symlinks require Administrator privileges on Windows
 - Each linked repo gets its own `code-intelligence-{name}` MCP server
 - Git and Filesystem servers span all linked repos
 - See `docs/WORKSPACE_PATTERN.md` for full documentation
+- See `docs/BEST_PRACTICES.md` for team usage guidelines
 

@@ -85,6 +85,21 @@ Write-Host "  Config uses `${workspaceFolder}` - fully portable!" -ForegroundCol
 Write-Host ""
 Write-Host "  Mode indicator: .cursor/ACTIVE_MODE.txt" -ForegroundColor DarkGray
 Write-Host ""
+
+# Quick validation
+Write-Host "  Validating configuration..." -ForegroundColor Yellow
+$ValidateScript = Join-Path $PSScriptRoot "validate_mcp_config.py"
+$ConfigPath = Join-Path $WorkspacePath ".cursor\mcp.json"
+if (Test-Path $ValidateScript) {
+    & python $ValidateScript --config $ConfigPath 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  ✓ Configuration validated" -ForegroundColor Green
+    } else {
+        Write-Host "  ⚠️  Validation warnings - check output above" -ForegroundColor Yellow
+    }
+}
+
+Write-Host ""
 Write-Host "  Next steps:" -ForegroundColor Cyan
 Write-Host "    1. Restart Cursor completely (close all windows)" -ForegroundColor White
 Write-Host "    2. Open workspace: $WorkspacePath" -ForegroundColor White

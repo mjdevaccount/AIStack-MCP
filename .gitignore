@@ -79,6 +79,12 @@ desktop.ini
 # Cursor
 .cursor/workspace/
 .cursor/cache/
+.cursor/*.backup_*
+.cursor/ACTIVE_MODE.txt
+
+# Workspaces (linked/cloned repos - keep only README)
+workspaces/*/
+!workspaces/README.md
 
 # Temporary
 *.tmp
