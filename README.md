@@ -161,10 +161,18 @@ Just open a project in Cursor and all tools adapt automatically via `${workspace
 
 ## Troubleshooting
 
+### ⚠️ Windows Users: Cursor Crashes or Hangs
+
+**If Cursor crashes or hangs when starting the MCP server:**
+
+This is a known Windows STDIO transport issue. See **[Windows MCP Fix Guide](docs/troubleshooting/WINDOWS_MCP_FIX.md)** for solutions.
+
+**Quick fix:** Use `cmd /c` wrapper in your `.cursor/mcp.json` (see `.cursor/mcp.json.example`)
+
 ### MCP servers not appearing
 
 1. Restart Cursor completely
-2. Check `%APPDATA%\Cursor\User\mcp_settings.json` exists
+2. Check `%APPDATA%\Cursor\User\mcp_settings.json` exists (or `.cursor/mcp.json` in workspace)
 3. View Cursor logs: Help > Toggle Developer Tools > Console
 
 ### Ollama not working

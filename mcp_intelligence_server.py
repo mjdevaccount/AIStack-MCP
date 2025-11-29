@@ -31,6 +31,8 @@ from fastmcp import FastMCP
 import argparse
 import sys
 import os
+import platform
+import traceback
 from pathlib import Path
 from typing import Optional, List, Dict, Any
 import asyncio
@@ -515,13 +517,55 @@ async def index_workspace(
 if __name__ == "__main__":
     logger.info("=" * 60)
     logger.info("Code Intelligence MCP Server - Portable")
+    logger.info(f"Platform: {platform.system()} {platform.release()}")
+    logger.info(f"Python: {sys.version.split()[0]}")
     logger.info(f"Workspace: {WORKSPACE_PATH}")
     logger.info(f"Collection: {COLLECTION_NAME}")
+    logger.info(f"Ollama URL: {OLLAMA_URL}")
+    logger.info(f"Qdrant URL: {QDRANT_URL}")
     logger.info("=" * 60)
     logger.info("Tools: semantic_search, analyze_patterns, get_context, generate_code, index_workspace")
+    
+    # Windows-specific warnings
+    if platform.system() == "Windows":
+        logger.warning("=" * 60)
+        logger.warning("WINDOWS DETECTED - STDIO Transport")
+        logger.warning("=" * 60)
+        logger.warning("If Cursor crashes or hangs, use one of these fixes:")
+        logger.warning("1. Use 'cmd /c' wrapper in .cursor/mcp.json (RECOMMENDED)")
+        logger.warning("2. Use full Python path from virtual environment")
+        logger.warning("3. Use uv package manager")
+        logger.warning("See .cursor/mcp.json.example for configurations")
+        logger.warning("=" * 60)
+    
+    logger.info("Starting STDIO transport...")
     logger.info("Ready for MCP connections")
     
-    # Use stdio transport (required for MCP protocol)
-    mcp.run(transport="stdio")
+    try:
+        # Use stdio transport (required for MCP protocol)
+        mcp.run(transport="stdio")
+    except KeyboardInterrupt:
+        logger.info("Server stopped by user")
+        sys.exit(0)
+    except Exception as e:
+        logger.error("=" * 60)
+        logger.error("SERVER FAILED TO START")
+        logger.error("=" * 60)
+        logger.error(f"Error type: {type(e).__name__}")
+        logger.error(f"Error message: {str(e)}")
+        logger.error("")
+        logger.error("Full traceback:")
+        logger.error(traceback.format_exc())
+        logger.error("=" * 60)
+        
+        if platform.system() == "Windows":
+            logger.error("WINDOWS-SPECIFIC TROUBLESHOOTING:")
+            logger.error("1. Check if using 'cmd /c' wrapper in mcp.json")
+            logger.error("2. Verify Python path is correct")
+            logger.error("3. Test server directly: python mcp_intelligence_server.py --workspace <path>")
+            logger.error("4. Check Cursor logs: Help → Toggle Developer Tools → Console")
+            logger.error("5. Ensure Ollama and Qdrant are running")
+        
+        sys.exit(1)
 
 

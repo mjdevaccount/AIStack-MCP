@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "code-intelligence": {
+      "_comment": "SOLUTION 2: Full Python Path from Virtual Environment",
+      "_description": "Use this if you have a virtual environment with all dependencies",
+      "_note": "Update the path to match your actual .venv location",
+      "command": "C:\\AIStack-MCP\\.venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\AIStack-MCP\\mcp_intelligence_server.py",
+        "--workspace",
+        "${workspaceFolder}"
+      ],
+      "env": {
+        "OLLAMA_URL": "http://localhost:11434",
+        "QDRANT_URL": "http://localhost:6333"
+      }
+    }
+  }
+}
+

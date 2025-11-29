@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "code-intelligence": {
+      "_comment": "SOLUTION 1: cmd /c Wrapper (RECOMMENDED for Windows)",
+      "_description": "This is the fastest fix for Windows STDIO issues with Cursor",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "python",
+        "C:\\AIStack-MCP\\mcp_intelligence_server.py",
+        "--workspace",
+        "${workspaceFolder}"
+      ],
+      "env": {
+        "OLLAMA_URL": "http://localhost:11434",
+        "QDRANT_URL": "http://localhost:6333"
+      }
+    }
+  }
+}
+

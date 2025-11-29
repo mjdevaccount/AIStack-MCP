@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "code-intelligence": {
+      "_comment": "SOLUTION 3: uv Package Manager (Modern Approach)",
+      "_description": "FastMCP officially recommends this approach for better dependency management",
+      "_note": "Requires uv to be installed: https://github.com/astral-sh/uv",
+      "command": "uv",
+      "args": [
+        "run",
+        "--with", "fastmcp",
+        "--with", "langchain-ollama",
+        "--with", "qdrant-client",
+        "--with", "loguru",
+        "--with", "requests",
+        "python",
+        "C:\\AIStack-MCP\\mcp_intelligence_server.py",
+        "--workspace",
+        "${workspaceFolder}"
+      ],
+      "env": {
+        "OLLAMA_URL": "http://localhost:11434",
+        "QDRANT_URL": "http://localhost:6333"
+      }
+    }
+  }
+}
+
