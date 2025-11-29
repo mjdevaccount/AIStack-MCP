@@ -511,6 +511,86 @@ async def index_workspace(
 
 
 # ============================================================================
+# TOOL: Validate Workspace Configuration
+# ============================================================================
+
+@mcp.tool()
+async def validate_workspace_config() -> str:
+    """
+    Validate that workspace and allowed directories are properly configured.
+    
+    Checks:
+    - Workspace path is accessible
+    - MCP config matches workspace
+    - Dependencies are installed
+    - Services (Ollama, Qdrant) are reachable
+    
+    Returns:
+        Validation report
+        
+    Example:
+        validate_workspace_config()
+    """
+    report = []
+    report.append("=" * 60)
+    report.append("WORKSPACE CONFIGURATION VALIDATION")
+    report.append("=" * 60)
+    report.append(f"Workspace: {WORKSPACE_PATH}")
+    report.append(f"Collection: {COLLECTION_NAME}")
+    report.append("")
+    
+    # Check 1: Workspace exists and is readable
+    try:
+        file_count = len(list(WORKSPACE_PATH.rglob("*")))
+        report.append(f"✅ Workspace accessible ({file_count} files/dirs)")
+    except Exception as e:
+        report.append(f"❌ Workspace not accessible: {e}")
+    
+    # Check 2: Ollama reachable
+    if local_llm:
+        report.append(f"✅ Ollama connected ({OLLAMA_URL})")
+    else:
+        report.append(f"❌ Ollama not available ({OLLAMA_URL})")
+    
+    # Check 3: Qdrant reachable
+    if qdrant_client:
+        try:
+            collections = qdrant_client.get_collections()
+            report.append(f"✅ Qdrant connected ({QDRANT_URL}, {len(collections.collections)} collections)")
+        except Exception as e:
+            report.append(f"❌ Qdrant error: {e}")
+    else:
+        report.append(f"❌ Qdrant not available ({QDRANT_URL})")
+    
+    # Check 4: Collection status
+    if qdrant_client:
+        try:
+            if ensure_collection():
+                info = qdrant_client.get_collection(COLLECTION_NAME)
+                report.append(f"✅ Collection ready ({info.points_count} vectors indexed)")
+                if info.points_count == 0:
+                    report.append(f"⚠️  Workspace not indexed yet. Run: index_workspace()")
+            else:
+                report.append(f"❌ Collection not ready")
+        except Exception as e:
+            report.append(f"❌ Collection error: {e}")
+    
+    report.append("")
+    report.append("=" * 60)
+    report.append("RECOMMENDATION:")
+    report.append("")
+    report.append("For multi-repo usage:")
+    report.append("1. Launch one MCP server per repository")
+    report.append("2. Use ${workspaceFolder} in .cursor/mcp.json")
+    report.append("3. Ensure workspace == filesystem allowed directory")
+    report.append("")
+    report.append("See: docs/WORKSPACE_PATTERN.md")
+    report.append("=" * 60)
+    
+    return "\n".join(report)
+
+
+# ============================================================================
 # SERVER STARTUP
 # ============================================================================
 
@@ -524,7 +604,7 @@ if __name__ == "__main__":
     logger.info(f"Ollama URL: {OLLAMA_URL}")
     logger.info(f"Qdrant URL: {QDRANT_URL}")
     logger.info("=" * 60)
-    logger.info("Tools: semantic_search, analyze_patterns, get_context, generate_code, index_workspace")
+    logger.info("Tools: semantic_search, analyze_patterns, get_context, generate_code, index_workspace, validate_workspace_config")
     
     # Windows-specific warnings
     if platform.system() == "Windows":

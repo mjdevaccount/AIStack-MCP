@@ -1,8 +1,6 @@
-﻿{
+{
   "mcpServers": {
     "code-intelligence": {
-      "_comment": "SOLUTION 1: cmd /c Wrapper (RECOMMENDED for Windows)",
-      "_description": "This is the fastest fix for Windows STDIO issues with Cursor",
       "command": "cmd",
       "args": [
         "/c",
@@ -15,6 +13,23 @@
         "OLLAMA_URL": "http://localhost:11434",
         "QDRANT_URL": "http://localhost:6333"
       }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ]
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--repository",
+        "${workspaceFolder}"
+      ]
     }
   }
 }

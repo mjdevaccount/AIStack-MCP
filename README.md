@@ -61,6 +61,65 @@ cursor .
 
 Cursor automatically connects MCP servers to THIS project via `${workspaceFolder}`
 
+## Workspace Pattern (Important!)
+
+This toolkit follows the **2025 best practice** for MCP servers:
+
+### Golden Rule
+**One MCP server instance per repository, workspace == allowed directory**
+
+### Why This Matters
+
+✅ **Security**: Each repo gets isolated permissions  
+✅ **Clarity**: No confusion about what servers can access  
+✅ **Portability**: Works across machines with `${workspaceFolder}`
+
+### Validation
+
+Before first use in a new repository:
+```powershell
+python scripts/validate_workspace.py --workspace <your-repo-path>
+```
+
+Or use the built-in tool in Cursor:
+```
+Use code-intelligence to validate_workspace_config
+```
+
+### Multi-Repo Usage
+
+**Option 1: Dynamic (Recommended)**
+
+Use the included `.cursor/mcp.json` - it automatically adapts to any workspace via `${workspaceFolder}`.
+
+**Option 2: Explicit Launch**
+```powershell
+.\scripts\launch_mcp_for_repo.ps1 -RepoPath "C:\Projects\MyApp"
+```
+
+See [docs/WORKSPACE_PATTERN.md](docs/WORKSPACE_PATTERN.md) for full details.
+
+## Project Structure
+
+```
+AIStack-MCP/
+├── .cursor/
+│   └── mcp.json              # MCP server configuration
+├── docs/
+│   ├── WORKSPACE_PATTERN.md  # Workspace pattern documentation
+│   ├── SETUP.md              # Setup guide
+│   └── troubleshooting/      # Troubleshooting guides
+├── scripts/
+│   ├── validate_workspace.py # Workspace validation tool
+│   ├── test_workspace_pattern.py # Integration tests
+│   └── launch_mcp_for_repo.ps1   # Per-repo launcher
+├── python_agent/             # Python agent modules
+├── mcp_intelligence_server.py # Main MCP server
+├── requirements.txt          # Python dependencies
+├── docker-compose.yml        # Docker services
+└── README.md                 # This file
+```
+
 ## Tools Available
 
 ### Community Tools (Standard)
@@ -76,6 +135,7 @@ Cursor automatically connects MCP servers to THIS project via `${workspaceFolder
 - **get_context(file, task)** - Optimized context for generation
 - **generate_code(file, task)** - AI code generation
 - **index_workspace()** - Index project for search (run once)
+- **validate_workspace_config()** - Validate workspace configuration
 
 ## Usage Examples
 

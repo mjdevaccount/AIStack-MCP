@@ -1,2 +1,5 @@
 ﻿# Cursor ignore file
 # .env is intentionally NOT ignored so it can be edited
+
+# Allow AI to edit MCP configuration
+!.cursor/mcp.json
