@@ -8,7 +8,7 @@ pytest-timeout>=2.2.0
 pytest-mock>=3.12.0
 
 # HTTP mocking
-responses>=0.24.0
+responses>=0.26.0
 httpx>=0.26.0
 
 # Async testing
