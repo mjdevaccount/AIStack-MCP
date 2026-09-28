@@ -27,6 +27,6 @@ pydantic-settings>=2.11.0
 python-dotenv>=1.0.0
 
 # Optional: For advanced code analysis
-tree-sitter>=0.20.0
+tree-sitter>=0.26.0
 tree-sitter-languages>=1.0.0
 
