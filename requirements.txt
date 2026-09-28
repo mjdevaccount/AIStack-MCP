@@ -3,7 +3,7 @@ fastmcp>=0.1.0
 langchain-ollama>=0.1.0
 qdrant-client>=1.7.0
 loguru>=0.7.0
-requests>=2.31.0
+requests>=2.34.2
 
 # Environment management
 python-dotenv>=1.0.0
