@@ -28,5 +28,5 @@ python-dotenv>=1.0.0
 
 # Optional: For advanced code analysis
 tree-sitter>=0.26.0
-tree-sitter-languages>=1.0.0
+tree-sitter-languages>=1.10.2
 
